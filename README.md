@@ -1,5 +1,6 @@
 # ACS - AES CBC Streamer
 
+[![CircleCI](https://circleci.com/gh/mdouchement/acs.svg?style=shield)](https://circleci.com/gh/mdouchement/acs)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/mdouchement/acs)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mdouchement/acs)](https://goreportcard.com/report/github.com/mdouchement/acs)
 [![License](https://img.shields.io/github/license/mdouchement/acs.svg)](http://opensource.org/licenses/MIT)
