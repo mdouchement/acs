@@ -9,6 +9,8 @@ import (
 )
 
 var (
+	// ErrNotEnoughBytes is returned when reading unwanted number of bytes from data.
+	ErrNotEnoughBytes = errors.New("acs: not enough read bytes")
 	// ErrTooShort is returned when reading AES CBC data that is too short (less than blocksize).
 	ErrTooShort = errors.New("acs: ciphertext too short")
 	// ErrModulo is returned when reading AES CBC data that is not a multiple of the block size.
@@ -46,8 +48,14 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 	defer r.mu.Unlock()
 
 	if r.beginning {
-		_, err = r.r.Read(r.iv)
+		n, err = r.r.Read(r.iv)
 		if err != nil {
+			n = 0 // Force caller reader (aka gzip.Reader) to catch the error
+			return
+		}
+		if n != len(r.iv) {
+			n = 0 // Force caller reader (aka gzip.Reader) to catch the error
+			err = ErrNotEnoughBytes
 			return
 		}
 		r.beginning = false
