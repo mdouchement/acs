@@ -48,7 +48,7 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 	defer r.mu.Unlock()
 
 	if r.beginning {
-		n, err = r.r.Read(r.iv)
+		n, err = io.ReadFull(r.r, r.iv)
 		if err != nil {
 			n = 0 // Force caller reader (aka gzip.Reader) to catch the error
 			return
@@ -65,6 +65,7 @@ func (r *Reader) Read(p []byte) (n int, err error) {
 
 	n, err = r.r.Read(p)
 	if err != nil && err != io.EOF {
+		n = 0 // Force caller reader (aka gzip.Reader) to catch the error
 		return
 	}
 
